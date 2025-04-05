@@ -1,0 +1,34 @@
+{
+    "crise": {
+      "type": "Inondation",
+      "lieu": "Paris",
+      "gravité": 3,
+      "durée": 4,
+      "accessibilité": "partielle"
+    },
+    "perso": {
+      "nom": "Crisou",
+      "parametres_vitaux": {
+        "vie": 100,
+        "énergie": 80,
+        "hydratation": 60,
+        "sécurité": 70,
+        "moral": 90
+      },
+      "ressources": {
+        "eau": 2,
+        "nourriture": 3,
+        "trousse_secours": true,
+        "lampe": true,
+        "batterie": 80,
+        "abri": false,
+        "couverture": true,
+        "radio": false,
+        "téléphone": true
+      },
+      "dépendances": {
+        "enfants": ["Lina", "Yanis"],
+        "animaux": ["Tito le chien"]
+      }
+    }
+  }
