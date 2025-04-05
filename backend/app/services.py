@@ -17,6 +17,9 @@ logging.basicConfig(
     ]
 )
 
+RAG_API_ENDPOINT="https://hackathon-ia-et-crise.fr/admin/rag-system/api/app"
+MISTRAL_API_KEY ="pJKvqp2uKF9PkULrp6LywyBsDHWaWnQZ"
+
 logger = logging.getLogger("backend.services")
 
 # Load environment variables
@@ -86,6 +89,76 @@ def get_mistral_response(conversation_history: List[Dict[str, str]],
         logger.error(f"Error in get_mistral_response: {str(e)}")
         return None
 
+def get_embeddings(query, collection_name):
+    """
+    Get embeddings for a query using the specified collection.
+
+    Args:
+        query (str): The query text to get embeddings for
+        collection_name (str): The name of the collection to use
+
+    Returns:
+        The embeddings response
+    """
+    print_step(2, "Getting Embeddings for Query")
+    try:
+        # Construct the URL
+        url = f"{RAG_API_ENDPOINT}/inferencing/get_embeddings"
+
+        # Ensure collection is properly formatted
+        if isinstance(collection_name, list):
+            collection_name = collection_name[0] if collection_name else ""
+
+        # Clean up the collection name
+        collection_name = str(collection_name).strip().strip('"\'[]')
+
+        # Set up the parameters
+        params = {
+            "query": query,
+            "collection_name": collection_name,
+            "api_key": MISTRAL_API_KEY
+        }
+
+        print(f"Calling: {url}")
+        print("Parameters:")
+        print_json({k: v if k != "api_key" else "****" for k, v in params.items()})
+
+        # Make the request
+        response = requests.post(url, params=params)
+
+        print(f"Status Code: {response.status_code}")
+
+        if response.status_code != 200:
+            print(f"Error: {response.status_code}")
+            print(f"Response: {response.text}")
+            return None
+
+        # Try to parse as JSON
+        try:
+            result = response.json()
+            print("\nEmbeddings Response:")
+
+            # Check if the result is a string containing a large embedding vector
+            if isinstance(result, str) and len(result) > 1000:
+                # If it's a very long string (likely an embedding vector), just show a preview
+                print(f"Received embedding vector (showing first 100 chars): {result[:100]}...")
+                print(f"Full vector length: {len(result)} characters")
+            else:
+                print_json(result)
+
+            return result
+        except json.JSONDecodeError:
+            # If it's not JSON, just return the text
+            print("\nResponse (text):")
+            print(response.text[:500] + "..." if len(response.text) > 500 else response.text)
+            return response.text
+
+    except Exception as e:
+        print(f"Error getting embeddings: {str(e)}")
+        import traceback
+        print(traceback.format_exc())
+        return None
+
 def generate_crisis_scenario(initial_state: Dict[str, Any]) -> Optional[str]:
     """
     Generate a crisis scenario based on the user's profile and initial state.
@@ -98,11 +171,19 @@ def generate_crisis_scenario(initial_state: Dict[str, Any]) -> Optional[str]:
     """
     logger.debug("Generating crisis scenario")
     
+    query = "extrait la sitatuation de crise la plus proche du contexte suivant : PAYS ENVIRONNEMENT"
+    #rag_extraction = get_embeddings(query, "situation_de_crise")
+
     prompt = f"""
-    Based on this JSON data representing a user's profile and starting state:
+    Génére une description concise d'un scénario d'une innondation en Haute-Saône impliquant Crisou.
+    Crisou, est en Haute-Saône lorsque l'eau commence à monter rapidement suite à une inondation soudaine. Vous êtes seul et n'avez pas d'expérience particulière pour ce genre de situation. Les accès routiers autour de vous risquent d'être rapidement coupés. Quelle est votre première action pour assurer votre sécurité ?
+
+    This JSON data representing a user's profile and starting state:
     {json.dumps(initial_state, indent=2)}
+    rag_extraction
     
-    Generate a concise crisis scenario description. This crisis should be the most likely type the user might encounter based primarily on their 'location'. The description must be detailed enough to allow the user to make an informed first decision, but remain relatively brief. Output *only* the scenario description text.
+
+
     """
     
     conversation = [{"role": "user", "content": prompt}]

@@ -56,7 +56,7 @@ def render_crisis_simulation():
 
 def main():
     # Create sidebar buttons
-    st.sidebar.title("Crisou simulation")
+    st.sidebar.title("Crisou")
     #selected_page = st.sidebar.radio("Go to", ["Default App", "Chatbot", "Crisis Simulation", "README"])
     
     

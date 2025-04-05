@@ -27,8 +27,8 @@
         "téléphone": true
       },
       "dépendances": {
-        "enfants": ["Lina", "Yanis"],
-        "animaux": ["Tito le chien"]
+        "enfants": [""],
+        "animaux": [""]
       }
     }
   }
