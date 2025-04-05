@@ -1,0 +1,23 @@
+ForgeAI Services Restart Script
+================================
+Restarting services for application: hackathon2
+Frontend port: 15249
+Backend port: 15250
+Stopping existing processes...
+Killing frontend processes on port 15249: 690
+Killing frontend PID: 690
+Killing backend processes on port 15250: 689
+839
+Killing backend PID: 689
+Killing backend PID: 839
+Starting backend...
+Installing requirements...
+Using backend file: main_back.py
+Setting root_path to: /crisishackers/hackathon2
+Backend started with PID: 846
+Starting frontend...
+Using frontend file: main_front.py
+Using path-based URL: crisishackers/hackathon2
+Frontend started with PID: 847
+Services restarted successfully!
+================================
