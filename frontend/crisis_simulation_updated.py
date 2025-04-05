@@ -72,10 +72,10 @@ def log_debug_info(message, data=None):
 
 def render_input_form():
     """Render the form to collect user information"""
-    st.title("Crisis Simulation Setup")
+    st.title("Crisis Simulation")
 
 
-    st.write("Crise Survivor est un jeu éducatif immersif qui sensibilise le grand public aux gestes essentiels à adopter face aux situations de crise, comme les inondations. À travers un parcours interactif et des choix stratégiques, le joueur accompagne un petit avatar dans sa quête de survie. Chaque décision compte : bien répondre aux questions permet de guider le personnage vers la sécurité.")
+    st.write("Crisou est un jeu éducatif immersif qui sensibilise le grand public aux gestes essentiels à adopter face aux situations de crise, comme les inondations. À travers un parcours interactif et des choix stratégiques, le joueur accompagne un petit avatar dans sa quête de survie. Chaque décision compte : bien répondre aux questions permet de guider le personnage vers la sécurité.")
     st.subheader("Please provide information about yourself to generate a personalized crisis scenario.")
     
     with st.form("user_info_form"):
@@ -571,7 +571,7 @@ def main():
     
     # Render the appropriate view based on app state
     log_debug_info(f"Current app_state: {st.session_state['app_state']}")
-    st.title("Crise Survivor")
+    st.title("Crisou")
     try:
         if st.session_state['app_state'] == 'collecting_info':
             render_input_form()
